@@ -131,9 +131,9 @@ td{border-bottom:1px solid var(--line-soft);padding:6px}
 footer{padding:14px clamp(16px,3vw,36px) 28px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
 
 @media (max-width: 980px){
-  main{grid-template-columns:1fr}
+  main{grid-template-columns:minmax(0,1fr)}
   aside{border-right:0;border-bottom:1px solid var(--line)}
-  .grid2,.lower{grid-template-columns:1fr}
+  .grid2,.lower{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width: 560px){
   .steps{grid-template-columns:1fr 1fr}
@@ -262,6 +262,7 @@ footer{padding:14px clamp(16px,3vw,36px) 28px;color:var(--muted);font-size:13px;
 <footer>Prototype for the CBS1901 TARP project. The model and the physical response come from a controlled four-zone simulation; results show the decision logic, not a certified safety system.</footer>
 
 <script src="model_export.js"></script>
+<script src="model.js"></script>
 <script>
 // MODEL is defined by model_export.js (written by export_model.py)
 const COL = {Protective:"var(--prot)",Harmful:"var(--harm)",Ineffective:"var(--ineff)",Inconsistent:"var(--inc)"};
@@ -289,34 +290,7 @@ let runNo = 0, lastTest = null;
 const $ = id => document.getElementById(id);
 $("tauLbl").textContent = "P ≥ " + MODEL.tau.toFixed(2);
 
-// ---------- model inference (exported sklearn GradientBoosting) ----------
-function vector(s){
-  const v = MODEL.num.map(k => k==="hop_distance" ? Math.abs(s.source_zone-s.protected_zone) : +s[k]);
-  MODEL.cats.forEach(c => v.push(s.actuator_type===c ? 1 : 0));
-  return v;
-}
-function predictProba(s){
-  const x = vector(s), r = MODEL.init.slice();
-  for (const stage of MODEL.trees){
-    for (let k=0;k<stage.length;k++){
-      const [f,th,l,rr,val] = stage[k]; let n=0;
-      while (l[n] !== -1) n = x[f[n]] <= th[n] ? l[n] : rr[n];
-      r[k] += MODEL.lr * val[n];
-    }
-  }
-  const m = Math.max(...r), e = r.map(z=>Math.exp(z-m)), t = e.reduce((a,b)=>a+b,0);
-  const out = {}; MODEL.classes.forEach((c,i)=>out[c]=e[i]/t); return out;
-}
-function gated(p){
-  if (p.Protective >= MODEL.tau) return "Protective";
-  let best=null; for (const c of MODEL.classes) if (c!=="Protective" && (best===null || p[c]>p[best])) best=c;
-  return best;
-}
-function hardConstraint(s){
-  if (s.occupancy && s.airflow_direction_to_protected)
-    return "Airflow is moving toward an occupied protected zone. Any push would carry the hazard onto people, so the action is rejected whatever the model predicts.";
-  return null;
-}
+// ---------- model inference: vector, predictProba, gated, hardConstraint are in model.js ----------
 
 // ---------- controls ----------
 const RANGES = ["initial_hazard_concentration","spatial_gradient","temporal_gradient","oxygen_pct","airflow_speed_mps","pressure_diff_pa","intervention_magnitude_pct","intervention_duration_s","actuator_trust","communication_delay_ms"];

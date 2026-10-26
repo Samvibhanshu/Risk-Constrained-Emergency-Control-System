@@ -11,7 +11,7 @@
       "harmful_recall": 0.9293,
       "protective_tau": 0.84,
       "false_safe_rate": 0.0076,
-      "inference_s_1000": 0.0234,
+      "inference_s_1000": 0.0181,
       "accuracy_ungated": 0.808,
       "false_safe_rate_ungated": 0.0202
     },
@@ -24,21 +24,21 @@
       "harmful_recall": 0.904,
       "protective_tau": 0.85,
       "false_safe_rate": 0.0076,
-      "inference_s_1000": 0.0046,
+      "inference_s_1000": 0.0042,
       "accuracy_ungated": 0.797,
       "false_safe_rate_ungated": 0.0379
     },
     {
       "model": "Random Forest",
-      "accuracy": 0.766,
+      "accuracy": 0.77,
       "weighted_precision": 0.7984,
-      "weighted_recall": 0.766,
-      "weighted_f1": 0.7418,
-      "harmful_recall": 0.9242,
+      "weighted_recall": 0.77,
+      "weighted_f1": 0.7476,
+      "harmful_recall": 0.9268,
       "protective_tau": 0.69,
       "false_safe_rate": 0.0101,
-      "inference_s_1000": 0.1005,
-      "accuracy_ungated": 0.803,
+      "inference_s_1000": 0.0901,
+      "accuracy_ungated": 0.805,
       "false_safe_rate_ungated": 0.0177
     }
   ],
@@ -87,11 +87,11 @@
     }
   },
   "top_features": {
-    "airflow_direction_to_protected": 0.3599,
+    "airflow_direction_to_protected": 0.3598,
     "actuator_fault": 0.1964,
     "sensor_fault": 0.1871,
     "intervention_magnitude_pct": 0.05,
-    "spatial_gradient": 0.0339,
+    "spatial_gradient": 0.034,
     "hop_distance": 0.0284,
     "intervention_duration_s": 0.0248,
     "initial_hazard_concentration": 0.0239,
