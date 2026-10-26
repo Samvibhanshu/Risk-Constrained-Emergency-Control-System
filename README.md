@@ -92,16 +92,6 @@ demo should not disagree with its model at all. `model.js` now rounds each input
 - **One model, two runtimes.** `export_model.py` writes the trees as JSON and refuses to write them unless they reproduce
   scikit-learn's probabilities, so the demo needs no server.
 
-## Limits
-
-- **Everything is simulated.** The four-zone building, the physics of the response and the label thresholds are
-  prototype assumptions (`simulate.py`). The results validate the decision logic, not a physical deployment.
-- **The labels come from rules**, and the classifier learns those rules from noisy inputs. Accuracy here says how well
-  the rules can be predicted before acting, not how real ventilation behaves.
-- **Protective recall is low (28%).** The gate deliberately sends most genuinely protective actions to Ineffective or
-  Harmful rather than risk a false-safe; in practice that means more small tests before acting.
-- The rollback and trust rules are fixed factors, not learned.
-
 ## Layout
 
 ```
